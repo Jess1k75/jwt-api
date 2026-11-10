@@ -1,0 +1,13 @@
+# Copie este arquivo para .env (no Windows: copy .envex .env) e ajuste os valores
+JWT_SECRET=troque-por-uma-chave-grande-e-aleatoria
+JWT_REFRESH_SECRET=outra-chave-diferente-da-primeira
+# Validade do access token (padrao 15m). Para o video de demonstracao use 30s
+JWT_ACCESS_EXPIRES=15m
+PORT=3000
+# Origens permitidas no CORS (separe por virgula)
+CORS_ORIGIN=http://localhost:5173,http://127.0.0.1:5173
+# Admin criado automaticamente na primeira execucao (seed)
+SEED_ADMIN_NAME=Administrador
+SEED_ADMIN_USERNAME=admin
+SEED_ADMIN_EMAIL=admin@biblioteca.com
+SEED_ADMIN_PASSWORD=123456

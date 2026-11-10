@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-// Valida o access token. Token ausente, inválido ou expirado => 401
-// (o front-end depende do 401 para saber que precisa renovar o token)
 exports.authenticate = (req, res, next) => {
   const header = req.headers.authorization || '';
   const [scheme, token] = header.split(' ');
@@ -19,7 +17,6 @@ exports.authenticate = (req, res, next) => {
   }
 };
 
-// Perfil: apenas administradores. Atendente => 403
 exports.isAdmin = (req, res, next) => {
   if (!req.user || !req.user.isAdmin) {
     return res.status(403).json({ message: 'Acesso restrito a administradores.' });

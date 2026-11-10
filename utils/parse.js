@@ -6,7 +6,6 @@ function parseId(value) {
   return n;
 }
 
-// Pega apenas as chaves informadas (ignora undefined), aplica trim e troca '' por null
 function pick(obj, keys) {
   const out = {};
   const src = obj || {};

@@ -7,7 +7,7 @@ exports.authenticate = (req, res, next) => {
   if (scheme !== 'Bearer' || !token) {
     return res.status(401).json({ message: 'Token não informado.' });
   }
-
+ 
   try {
     req.user = jwt.verify(token, process.env.JWT_SECRET);
     return next();

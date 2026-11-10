@@ -13,7 +13,6 @@ exports.findById = async (id) => {
   return user;
 };
 
-// Usado só no login: precisa do campo password
 exports.findByEmail = (email) => User.unscoped().findOne({ where: { email: normalizeEmail(email) || '' } });
 
 async function hashPassword(password) {
@@ -46,7 +45,7 @@ exports.setActive = async (id, active) => {
   if (typeof active !== 'boolean') throw new HttpError(400, 'Informe "active" como true ou false.');
   const user = await exports.findById(id);
   await user.update({ active });
-  // atendente desativado perde as sessões abertas
+
   if (!active) await RefreshToken.update({ revoked: true }, { where: { userId: id } });
   return User.findByPk(id);
 };

@@ -1,6 +1,5 @@
 const HttpError = require('./httpError');
 
-// Middleware final: transforma qualquer erro em JSON { message }
 // eslint-disable-next-line no-unused-vars
 module.exports = (err, req, res, next) => {
   if (err instanceof HttpError) {

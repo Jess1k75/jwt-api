@@ -1,6 +1,3 @@
-// Uso (só para a DEMONSTRAÇÃO em vídeo):
-//   npm run atrasar -- <idDoEmprestimo> [diasDeAtraso]
-// Deixa o empréstimo vencido há N dias (padrão 3) para você mostrar a multa na devolução.
 require('dotenv').config();
 const { sequelize, Loan } = require('../models');
 
@@ -17,7 +14,7 @@ const { sequelize, Loan } = require('../models');
     process.exit(1);
   }
   const DAY = 24 * 60 * 60 * 1000;
-  loan.dueDate = new Date(Date.now() - (days * DAY - 60 * 60 * 1000)); // vence há "days" dias (folga de 1h)
+  loan.dueDate = new Date(Date.now() - (days * DAY - 60 * 60 * 1000)); 
   loan.loanDate = new Date(loan.dueDate.getTime() - 7 * DAY);
   loan.status = 'ATRASADO';
   await loan.save();

@@ -19,7 +19,6 @@ const User = sequelize.define(
   },
   {
     tableName: 'users',
-    // a senha nunca sai nas consultas normais (use User.unscoped() para o login)
     defaultScope: { attributes: { exclude: ['password'] } },
   }
 );

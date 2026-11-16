@@ -17,7 +17,6 @@ function signAccessToken(user) {
 
 async function createRefreshToken(user) {
   const expiresAt = new Date(Date.now() + REFRESH_DAYS * 24 * 60 * 60 * 1000);
-  // jti aleatório garante que dois tokens do mesmo usuário nunca sejam iguais
   const token = jwt.sign({ id: user.id, jti: crypto.randomUUID() }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: `${REFRESH_DAYS}d`,
   });
@@ -32,14 +31,12 @@ async function issueTokens(user) {
 exports.login = async (email, password) => {
   if (!email || !password) throw new HttpError(400, 'Informe e-mail e senha.');
 
-  // 1) verifica se o usuário existe ANTES de comparar a senha (correção do bug do login)
   const user = await userService.findByEmail(email);
   if (!user) throw new HttpError(401, 'E-mail ou senha inválidos.');
 
   const isMatch = await bcrypt.compare(String(password), user.password);
   if (!isMatch) throw new HttpError(401, 'E-mail ou senha inválidos.');
 
-  // 2) atendente desativado não faz login
   if (!user.active) throw new HttpError(403, 'Usuário desativado. Procure um administrador.');
 
   const tokens = await issueTokens(user);
@@ -59,7 +56,6 @@ exports.refresh = async (refreshToken) => {
   const record = await RefreshToken.findOne({ where: { token: refreshToken } });
   if (!record) throw new HttpError(401, 'Refresh token não reconhecido.');
 
-  // Reuso de um token já revogado = possível roubo: derruba todas as sessões do usuário
   if (record.revoked) {
     await RefreshToken.update({ revoked: true }, { where: { userId: record.userId } });
     throw new HttpError(401, 'Refresh token reutilizado. Todas as sessões foram encerradas, faça login novamente.');
@@ -75,7 +71,6 @@ exports.refresh = async (refreshToken) => {
   }
   if (!user.active) throw new HttpError(401, 'Usuário desativado.');
 
-  // Rotação: revoga o antigo e devolve um par novo
   await record.update({ revoked: true });
   return issueTokens(user);
 };
